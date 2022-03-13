@@ -1,0 +1,49 @@
+create database sgm;
+use sgm;
+
+create table pessoa_fisica (
+cpf varchar(14) not null primary key,
+nome varchar(100) not null,
+rg varchar(10) not null,
+endereco varchar(150) not null,
+sexo varchar(10) not null,
+data_nascimento date not null);
+
+create table pessoa_juridica (
+cnpj varchar(18) not null primary key,
+nome varchar(100) not null,
+nome_fantasia varchar(100),
+endereco varchar(150) not null,
+cpf_representante_legal varchar(14) not null,
+foreign key (cpf_representante_legal) references pessoa_fisica(cpf)
+);
+
+create table prefeitura (
+cnpj varchar(18) not null primary key,
+nome varchar(100) not null,
+nome_fantasia varchar (100),
+endereco varchar(150) not null,
+cpf_representante_legal varchar(14) not null,
+foreign key (cpf_representante_legal) references pessoa_fisica(cpf));
+
+create table mercado (
+cnpj varchar(18) not null primary key,
+nome varchar(100) not null,
+nome_fantasia varchar (100),
+endereco varchar(150) not null,
+total_box int not null,
+cnpj_prefeitura varchar(18) not null,
+foreign key (cnpj_prefeitura) references prefeitura(cnpj));
+
+create table contrato (
+id int not null primary key,
+cnpj_mercado varchar(18) not null,
+box int not null,
+data_inicio date not null,
+data_fim date not null,
+valor_aluguel double not null,
+cpf_locatario varchar(14),
+cnpj_locatario varchar(18),
+foreign key (cnpj_mercado) references mercado(cnpj),
+foreign key (cpf_locatario) references pessoa_fisica(cpf),
+foreign key (cnpj_locatario) references pessoa_juridica(cnpj));
